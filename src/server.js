@@ -1,3 +1,5 @@
-import app from "./app"
+import app from './app'
 
-app.listen(3001)
+export default (req, res) => {
+    app(req, res)
+}
