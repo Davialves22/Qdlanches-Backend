@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_QdLanches
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: IfBurger
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:6
+    container_name: mongo_ifburger
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  app:
+    build: "./" 
+    container_name: app_ifburger
+    restart: always
+    depends_on:
+      - postgres
+      - mongo
+    environment:
+      DB_DIALECT: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_NAME: IfBurger
+      MONGO_URL: mongodb://mongo:27017/IfBurger
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    command: ["sh", "-c", "yarn install && yarn dev"]
+
+volumes:
+  postgres_data:
+  mongo_data:
