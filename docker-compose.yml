@@ -8,7 +8,8 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: IfBurger
+      POSTGRES_DB: IfBurger-postgres
+
     ports:
       - "5432:5432"
     volumes:
@@ -36,7 +37,7 @@ services:
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: root
-      DB_NAME: IfBurger
+      DB_NAME: mongoBurger
       MONGO_URL: mongodb://mongo:27017/IfBurger
     ports:
       - "3000:3000"
