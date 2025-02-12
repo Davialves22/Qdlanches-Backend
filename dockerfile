@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:16
 
 WORKDIR /usr/src/app
 
@@ -8,6 +8,6 @@ RUN yarn install
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["sh", "-c", "yarn dev"]
