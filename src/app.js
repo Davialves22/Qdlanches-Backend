@@ -1,34 +1,31 @@
-import express from "express"
-import routes from "./routes"
-import { resolve } from 'path'
-import cors from 'cors'
+const express = require("express");
+const routes = require("./routes");
+const { resolve } = require('path');
+const cors = require('cors');
 
-import './database'
+require('./database');
 
 class App {
     constructor() {
-        this.app = express()
-        this.app.use(cors())
+        this.app = express();
+        this.app.use(cors());
 
-        this.niddlewares()
-        this.routes()
+        this.middlewares();
+        this.routes();
     }
 
-    niddlewares() {
-        this.app.use(express.json())
-        this.app.use('/product-file',
-            express.static(resolve(__dirname, '..', 'uploads')))
+    middlewares() {
+        this.app.use(express.json());
+        this.app.use('/product-file', 
+            express.static(resolve(__dirname, '..', 'uploads')));
 
-        this.app.use('/category-file',
-            express.static(resolve(__dirname, '..', 'uploads')))
-
+        this.app.use('/category-file', 
+            express.static(resolve(__dirname, '..', 'uploads')));
     }
 
     routes() {
-        this.app.use(routes)
-
+        this.app.use(routes);
     }
-
 }
 
-export default new App().app
+module.exports = new App().app;

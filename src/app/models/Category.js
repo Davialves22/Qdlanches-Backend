@@ -1,4 +1,5 @@
-import Sequelize, { Model } from 'sequelize'
+const Sequelize = require('sequelize');
+const { Model } = Sequelize;
 
 class Category extends Model {
     static init(sequelize) {
@@ -8,15 +9,16 @@ class Category extends Model {
             url: {
                 type: Sequelize.VIRTUAL,
                 get() {
-                    return `http://localhost:3000/category-file/${this.path}`
+                    return `http://localhost:3000/category-file/${this.path}`;
                 },
             },
         },
             {
                 sequelize,
             }
-        )
-        return this
+        );
+        return this;
     }
 }
-export default Category
+
+module.exports = Category;

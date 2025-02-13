@@ -1,7 +1,7 @@
-import * as Yup from 'yup';
-import jwt from 'jsonwebtoken'
-import User from '../models/User';
-import authConfig from '../../config/auth'
+const Yup = require('yup');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const authConfig = require('../../config/auth');
 
 class SessionController {
     async store(request, response) {
@@ -15,7 +15,6 @@ class SessionController {
                 .status(400)
                 .json({ error: 'Verifique se seu email ou senha estão corretos' });
         };
-
 
         if (!(await schema.isValid(request.body))) return userEmailorPasswordIncorrect();
 
@@ -35,10 +34,10 @@ class SessionController {
             name: user.name,
             admin: user.admin,
             token: jwt.sign({ id: user.id, name: user.name }, authConfig.secret, {
-                expiresIn: authConfig.expiresIn,    
+                expiresIn: authConfig.expiresIn,
             })
         });
     }
 }
 
-export default new SessionController();
+module.exports = new SessionController();

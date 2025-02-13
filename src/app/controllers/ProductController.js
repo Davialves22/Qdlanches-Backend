@@ -1,7 +1,7 @@
-import * as Yup from 'yup'
-import Product from '../models/Product'
-import Category from '../models/Category'
-import User from '../models/User'
+const Yup = require('yup');
+const Product = require('../models/Product');
+const Category = require('../models/Category');
+const User = require('../models/User');
 
 class ProductController {
     async store(request, response) {
@@ -11,23 +11,23 @@ class ProductController {
                 price: Yup.number().required(),
                 category_id: Yup.number().required(),
                 offer: Yup.boolean(),
-            })
+            });
 
             try {
-                await schema.validateSync(request.body, { abortEarly: false })
+                await schema.validateSync(request.body, { abortEarly: false });
             } catch (err) {
-                return response.status(400).json({ error: err.errors })
+                return response.status(400).json({ error: err.errors });
             }
 
-            const { admin: isAdmin } = await User.findByPk(request.userId)
+            const { admin: isAdmin } = await User.findByPk(request.userId);
 
             if (!isAdmin) {
                 return response.status(401)
-                    .json({ error: 'usuário não autorizado' })
+                    .json({ error: 'usuário não autorizado' });
             }
 
-            const { filename: path } = request.file
-            const { name, price, category_id, offer } = request.body
+            const { filename: path } = request.file;
+            const { name, price, category_id, offer } = request.body;
 
             const product = await Product.create({
                 name,
@@ -35,12 +35,11 @@ class ProductController {
                 category_id,
                 path,
                 offer,
-            })
+            });
 
-
-            return response.json(product)
+            return response.json(product);
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
     }
 
@@ -50,11 +49,10 @@ class ProductController {
                 model: Category,
                 as: 'category',
                 attributes: ['id', 'name'],
-            }
-            ]
-        })
+            }]
+        });
 
-        return response.json(products)
+        return response.json(products);
     }
 
     //gerar update de produtos
@@ -65,35 +63,35 @@ class ProductController {
                 price: Yup.number(),
                 category_id: Yup.number(),
                 offer: Yup.boolean(),
-            })
+            });
 
             try {
-                await schema.validateSync(request.body, { abortEarly: false })
+                await schema.validateSync(request.body, { abortEarly: false });
             } catch (err) {
-                return response.status(400).json({ error: err.errors })
+                return response.status(400).json({ error: err.errors });
             }
 
-            const { admin: isAdmin } = await User.findByPk(request.userId)
+            const { admin: isAdmin } = await User.findByPk(request.userId);
 
             if (!isAdmin) {
                 return response.status(401)
-                    .json({ error: 'usuário não autorizado' })
+                    .json({ error: 'usuário não autorizado' });
             }
 
-            const { id } = request.params
+            const { id } = request.params;
 
-            const product = await Product.findByPk(id)
+            const product = await Product.findByPk(id);
 
             if (!product) {
-                return response.status(401).json({ error: 'produto não encontrado' })
+                return response.status(401).json({ error: 'produto não encontrado' });
             }
 
-            let path
+            let path;
             if (request.file) {
-                path = request.file.filename
+                path = request.file.filename;
             }
 
-            const { name, price, category_id, offer } = request.body
+            const { name, price, category_id, offer } = request.body;
 
             await Product.update(
                 {
@@ -104,15 +102,13 @@ class ProductController {
                     offer,
                 },
                 { where: { id } }
-            )
+            );
 
-
-            return response.status(200).json()
+            return response.status(200).json();
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
     }
 }
 
-
-export default new ProductController()
+module.exports = new ProductController();
